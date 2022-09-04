@@ -105,30 +105,30 @@ namespace Market.Migrations
                     b.ToTable("Flavors");
                 });
 
-            modelBuilder.Entity("Market.Models.FlavorSweet", b =>
+            modelBuilder.Entity("Market.Models.FlavorTreat", b =>
                 {
-                    b.Property<int>("FlavorSweetId")
+                    b.Property<int>("FlavorTreatId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<int>("FlavorId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SweetId")
+                    b.Property<int>("TreatId")
                         .HasColumnType("int");
 
-                    b.HasKey("FlavorSweetId");
+                    b.HasKey("FlavorTreatId");
 
                     b.HasIndex("FlavorId");
 
-                    b.HasIndex("SweetId");
+                    b.HasIndex("TreatId");
 
-                    b.ToTable("FlavorSweet");
+                    b.ToTable("FlavorTreat");
                 });
 
-            modelBuilder.Entity("Market.Models.Sweet", b =>
+            modelBuilder.Entity("Market.Models.Treat", b =>
                 {
-                    b.Property<int>("SweetId")
+                    b.Property<int>("TreatId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -141,11 +141,11 @@ namespace Market.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
-                    b.HasKey("SweetId");
+                    b.HasKey("TreatId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Sweets");
+                    b.ToTable("Treats");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -285,7 +285,7 @@ namespace Market.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Market.Models.FlavorSweet", b =>
+            modelBuilder.Entity("Market.Models.FlavorTreat", b =>
                 {
                     b.HasOne("Market.Models.Flavor", "Flavor")
                         .WithMany("JoinEntities")
@@ -293,18 +293,18 @@ namespace Market.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Market.Models.Sweet", "Sweet")
+                    b.HasOne("Market.Models.Treat", "Treat")
                         .WithMany("JoinEntities")
-                        .HasForeignKey("SweetId")
+                        .HasForeignKey("TreatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Flavor");
 
-                    b.Navigation("Sweet");
+                    b.Navigation("Treat");
                 });
 
-            modelBuilder.Entity("Market.Models.Sweet", b =>
+            modelBuilder.Entity("Market.Models.Treat", b =>
                 {
                     b.HasOne("Market.Models.ApplicationUser", "User")
                         .WithMany()
@@ -369,7 +369,7 @@ namespace Market.Migrations
                     b.Navigation("JoinEntities");
                 });
 
-            modelBuilder.Entity("Market.Models.Sweet", b =>
+            modelBuilder.Entity("Market.Models.Treat", b =>
                 {
                     b.Navigation("JoinEntities");
                 });

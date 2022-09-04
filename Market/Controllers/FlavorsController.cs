@@ -22,77 +22,75 @@ namespace Market.Controllers
       _userManager = userManager;
       _db = db;
     }
-
-    public async Task<ActionResult> Index()
+    [AllowAnonymous]
+    public ActionResult Index()
     {
-      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-      var currentUser = await _userManager.FindByIdAsync(userId);
-      var userFlavors = _db.Flavors.Where(entry => entry.User.Id == currentUser.Id).ToList();
-      return View(userFlavors);
+      List<Flavor> model = _db.Flavors.ToList();
+      return View(model);
     }
 
     public ActionResult Create()
     {
-      ViewBag.SweetId = new SelectList(_db.Sweets, "SweetId", "Name");
+      ViewBag.TreatId = new SelectList(_db.Treats, "TreatId", "Name");
       return View();
     }
 
     [HttpPost]
-    public async Task<ActionResult> Create(Flavor flavor, int SweetId)
+    public async Task<ActionResult> Create(Flavor flavor, int TreatId)
     {
       var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
       var currentUser = await _userManager.FindByIdAsync(userId);
       flavor.User = currentUser;
       _db.Flavors.Add(flavor);
       _db.SaveChanges();
-      if (SweetId != 0)
+      if (TreatId != 0)
       {
-          _db.FlavorSweet.Add(new FlavorSweet() { FlavorId = flavor.FlavorId, SweetId = SweetId });
+          _db.FlavorTreat.Add(new FlavorTreat() { FlavorId = flavor.FlavorId, TreatId = TreatId });
       }
       _db.SaveChanges();
       return RedirectToAction("Index");
     }
-
+    [AllowAnonymous]
     public ActionResult Details(int id)
     {
       var thisFlavor = _db.Flavors
           .Include(flavor => flavor.JoinEntities)
-          .ThenInclude(join => join.Sweet)
+          .ThenInclude(join => join.Treat)
           .FirstOrDefault(flavor => flavor.FlavorId == id);
       return View(thisFlavor);
     }
     public ActionResult Edit(int id)
     {
       var thisFlavor = _db.Flavors.FirstOrDefault(flavor => flavor.FlavorId == id);
-      ViewBag.SweetId = new SelectList(_db.Sweets, "SweetId", "Name");
+      ViewBag.TreatId = new SelectList(_db.Treats, "TreatId", "Name");
       return View(thisFlavor);
     }
 
     [HttpPost]
-    public ActionResult Edit(Flavor flavor, int SweetId)
+    public ActionResult Edit(Flavor flavor, int TreatId)
     {
-      if (SweetId != 0)
+      if (TreatId != 0)
       {
-        _db.FlavorSweet.Add(new FlavorSweet() { FlavorId = flavor.FlavorId, SweetId = SweetId });
+        _db.FlavorTreat.Add(new FlavorTreat() { FlavorId = flavor.FlavorId, TreatId = TreatId });
       }
       _db.Entry(flavor).State = EntityState.Modified;
       _db.SaveChanges();
       return RedirectToAction("Index");
     }
 
-    public ActionResult AddSweet(int id)
+    public ActionResult AddTreat(int id)
     {
       var thisFlavor = _db.Flavors.FirstOrDefault(flavor => flavor.FlavorId == id);
-      ViewBag.SweetId = new SelectList(_db.Sweets, "SweetId", "Name");
+      ViewBag.TreatId = new SelectList(_db.Treats, "TreatId", "Name");
       return View(thisFlavor);
     }
 
     [HttpPost]
-    public ActionResult AddSweet(Flavor flavor, int SweetId)
+    public ActionResult AddTreat(Flavor flavor, int TreatId)
     {
-      if (SweetId != 0)
+      if (TreatId != 0)
       {
-      _db.FlavorSweet.Add(new FlavorSweet() { FlavorId = flavor.FlavorId, SweetId = SweetId });
+      _db.FlavorTreat.Add(new FlavorTreat() { FlavorId = flavor.FlavorId, TreatId = TreatId });
       }
       _db.SaveChanges();
       return RedirectToAction("Index");
@@ -114,10 +112,10 @@ namespace Market.Controllers
     }
 
     [HttpPost]
-    public ActionResult DeleteSweet(int joinId)
+    public ActionResult DeleteTreat(int joinId)
     {
-      var joinEntry = _db.FlavorSweet.FirstOrDefault(entry => entry.FlavorSweetId == joinId);
-      _db.FlavorSweet.Remove(joinEntry);
+      var joinEntry = _db.FlavorTreat.FirstOrDefault(entry => entry.FlavorTreatId == joinId);
+      _db.FlavorTreat.Remove(joinEntry);
       _db.SaveChanges();
       return RedirectToAction("Index");
     }

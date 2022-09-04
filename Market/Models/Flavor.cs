@@ -6,13 +6,13 @@ namespace Market.Models
   {
     public Flavor()
     {
-      this.JoinEntities = new HashSet<FlavorSweet>();
+      this.JoinEntities = new HashSet<FlavorTreat>();
     }
 
     public int FlavorId { get; set; }
     public string Details { get; set; }
     public string Name { get; set; }
     public virtual ApplicationUser User { get; set; }
-    public virtual ICollection<FlavorSweet> JoinEntities { get; set; }
+    public virtual ICollection<FlavorTreat> JoinEntities { get; set; }
   }
 }

@@ -2,7 +2,7 @@
   Layout = "_Layout";
 }
 
-@model Market.Models.Sweet
+@model Market.Models.Treat
 
 <h2>Add a flavor</h2>
 
@@ -10,7 +10,7 @@
 
 @using (Html.BeginForm())
 {
-  @Html.HiddenFor(model => model.SweetId)
+  @Html.HiddenFor(model => model.TreatId)
 
   @Html.Label("Select flavor")
   @Html.DropDownList("FlavorId")

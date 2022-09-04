@@ -175,10 +175,10 @@ namespace Market.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Sweets",
+                name: "Treats",
                 columns: table => new
                 {
-                    SweetId = table.Column<int>(type: "int", nullable: false)
+                    TreatId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
                     Details = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
@@ -186,9 +186,9 @@ namespace Market.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Sweets", x => x.SweetId);
+                    table.PrimaryKey("PK_Treats", x => x.TreatId);
                     table.ForeignKey(
-                        name: "FK_Sweets_AspNetUsers_UserId",
+                        name: "FK_Treats_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -196,28 +196,28 @@ namespace Market.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "FlavorSweet",
+                name: "FlavorTreat",
                 columns: table => new
                 {
-                    FlavorSweetId = table.Column<int>(type: "int", nullable: false)
+                    FlavorTreatId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    SweetId = table.Column<int>(type: "int", nullable: false),
+                    TreatId = table.Column<int>(type: "int", nullable: false),
                     FlavorId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FlavorSweet", x => x.FlavorSweetId);
+                    table.PrimaryKey("PK_FlavorTreat", x => x.FlavorTreatId);
                     table.ForeignKey(
-                        name: "FK_FlavorSweet_Flavors_FlavorId",
+                        name: "FK_FlavorTreat_Flavors_FlavorId",
                         column: x => x.FlavorId,
                         principalTable: "Flavors",
                         principalColumn: "FlavorId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_FlavorSweet_Sweets_SweetId",
-                        column: x => x.SweetId,
-                        principalTable: "Sweets",
-                        principalColumn: "SweetId",
+                        name: "FK_FlavorTreat_Treats_TreatId",
+                        column: x => x.TreatId,
+                        principalTable: "Treats",
+                        principalColumn: "TreatId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -264,18 +264,18 @@ namespace Market.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FlavorSweet_FlavorId",
-                table: "FlavorSweet",
+                name: "IX_FlavorTreat_FlavorId",
+                table: "FlavorTreat",
                 column: "FlavorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FlavorSweet_SweetId",
-                table: "FlavorSweet",
-                column: "SweetId");
+                name: "IX_FlavorTreat_TreatId",
+                table: "FlavorTreat",
+                column: "TreatId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Sweets_UserId",
-                table: "Sweets",
+                name: "IX_Treats_UserId",
+                table: "Treats",
                 column: "UserId");
         }
 
@@ -297,7 +297,7 @@ namespace Market.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "FlavorSweet");
+                name: "FlavorTreat");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -306,7 +306,7 @@ namespace Market.Migrations
                 name: "Flavors");
 
             migrationBuilder.DropTable(
-                name: "Sweets");
+                name: "Treats");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

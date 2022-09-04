@@ -2,9 +2,9 @@
   Layout = "_Layout";
 }
 
-@model Market.Models.Sweet
+@model Market.Models.Treat
 
-<h4>Add a new sweet</h4>
+<h4>Add a new treat</h4>
 
 @using (Html.BeginForm())
 {
@@ -16,6 +16,6 @@
   @Html.Label("Select flavor")
   @Html.DropDownList("FlavorId")
 
-  <input type="submit" value="Add new sweet" class="btn btn-default" />
+  <input type="submit" value="Add new treat" class="btn btn-default" />
 }
-<p>@Html.ActionLink("Show all sweets", "Index")</p>
+<p>@Html.ActionLink("Show all treats", "Index")</p>

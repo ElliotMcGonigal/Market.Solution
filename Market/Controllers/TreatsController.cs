@@ -12,23 +12,21 @@ using System.Security.Claims;
 namespace Market.Controllers
 {
   [Authorize]
-  public class SweetsController : Controller
+  public class TreatsController : Controller
   {
     private readonly MarketContext _db;
     private readonly UserManager<ApplicationUser> _userManager;
 
-    public SweetsController(UserManager<ApplicationUser> userManager, MarketContext db)
+    public TreatsController(UserManager<ApplicationUser> userManager, MarketContext db)
     {
       _userManager = userManager;
       _db = db;
     }
-
-    public async Task<ActionResult> Index()
+    [AllowAnonymous]
+    public ActionResult Index()
     {
-      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-      var currentUser = await _userManager.FindByIdAsync(userId);
-      var userSweets = _db.Sweets.Where(entry => entry.User.Id == currentUser.Id).ToList();
-      return View(userSweets);
+      List<Treat> model = _db.Treats.ToList();
+      return View(model);
     }
 
     public ActionResult Create()
@@ -38,61 +36,61 @@ namespace Market.Controllers
     }
 
     [HttpPost]
-    public async Task<ActionResult> Create(Sweet sweet, int FlavorId)
+    public async Task<ActionResult> Create(Treat treat, int FlavorId)
     {
       var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
       var currentUser = await _userManager.FindByIdAsync(userId);
-      sweet.User = currentUser;
-      _db.Sweets.Add(sweet);
+      treat.User = currentUser;
+      _db.Treats.Add(treat);
       _db.SaveChanges();
       if (FlavorId != 0)
       {
-          _db.FlavorSweet.Add(new FlavorSweet() { FlavorId = FlavorId, SweetId = sweet.SweetId });
+          _db.FlavorTreat.Add(new FlavorTreat() { FlavorId = FlavorId, TreatId = treat.TreatId });
       }
       _db.SaveChanges();
       return RedirectToAction("Index");
     }
-
+    [AllowAnonymous]
     public ActionResult Details(int id)
     {
-      var thisSweet = _db.Sweets
-          .Include(sweet => sweet.JoinEntities)
+      var thisTreat = _db.Treats
+          .Include(treat => treat.JoinEntities)
           .ThenInclude(join => join.Flavor)
-          .FirstOrDefault(sweet => sweet.SweetId == id);
-      return View(thisSweet);
+          .FirstOrDefault(treat => treat.TreatId == id);
+      return View(thisTreat);
     }
     public ActionResult Edit(int id)
     {
-      var thisSweet = _db.Sweets.FirstOrDefault(sweet => sweet.SweetId == id);
+      var thisTreat = _db.Treats.FirstOrDefault(treat => treat.TreatId == id);
       ViewBag.FlavorId = new SelectList(_db.Flavors, "FlavorId", "Name");
-      return View(thisSweet);
+      return View(thisTreat);
     }
 
     [HttpPost]
-    public ActionResult Edit(Sweet sweet, int FlavorId)
+    public ActionResult Edit(Treat treat, int FlavorId)
     {
       if (FlavorId != 0)
       {
-        _db.FlavorSweet.Add(new FlavorSweet() { FlavorId = FlavorId, SweetId = sweet.SweetId });
+        _db.FlavorTreat.Add(new FlavorTreat() { FlavorId = FlavorId, TreatId = treat.TreatId });
       }
-      _db.Entry(sweet).State = EntityState.Modified;
+      _db.Entry(treat).State = EntityState.Modified;
       _db.SaveChanges();
       return RedirectToAction("Index");
     }
 
     public ActionResult AddFlavor(int id)
     {
-      var thisSweet = _db.Sweets.FirstOrDefault(sweet => sweet.SweetId == id);
+      var thisTreat = _db.Treats.FirstOrDefault(treat => treat.TreatId == id);
       ViewBag.FlavorId = new SelectList(_db.Flavors, "FlavorId", "Name");
-      return View(thisSweet);
+      return View(thisTreat);
     }
 
     [HttpPost]
-    public ActionResult AddFlavor(Sweet sweet, int FlavorId)
+    public ActionResult AddFlavor(Treat treat, int FlavorId)
     {
       if (FlavorId != 0)
       {
-      _db.FlavorSweet.Add(new FlavorSweet() { FlavorId = FlavorId, SweetId = sweet.SweetId });
+      _db.FlavorTreat.Add(new FlavorTreat() { FlavorId = FlavorId, TreatId = treat.TreatId });
       }
       _db.SaveChanges();
       return RedirectToAction("Index");
@@ -100,15 +98,15 @@ namespace Market.Controllers
 
     public ActionResult Delete(int id)
     {
-      var thisSweet = _db.Sweets.FirstOrDefault(sweet => sweet.SweetId == id);
-      return View(thisSweet);
+      var thisTreat = _db.Treats.FirstOrDefault(treat => treat.TreatId == id);
+      return View(thisTreat);
     }
 
     [HttpPost, ActionName("Delete")]
     public ActionResult DeleteConfirmed(int id)
     {
-      var thisSweet = _db.Sweets.FirstOrDefault(sweet => sweet.SweetId == id);
-      _db.Sweets.Remove(thisSweet);
+      var thisTreat = _db.Treats.FirstOrDefault(treat => treat.TreatId == id);
+      _db.Treats.Remove(thisTreat);
       _db.SaveChanges();
       return RedirectToAction("Index");
     }
@@ -116,8 +114,8 @@ namespace Market.Controllers
     [HttpPost]
     public ActionResult DeleteFlavor(int joinId)
     {
-      var joinEntry = _db.FlavorSweet.FirstOrDefault(entry => entry.FlavorSweetId == joinId);
-      _db.FlavorSweet.Remove(joinEntry);
+      var joinEntry = _db.FlavorTreat.FirstOrDefault(entry => entry.FlavorTreatId == joinId);
+      _db.FlavorTreat.Remove(joinEntry);
       _db.SaveChanges();
       return RedirectToAction("Index");
     }
