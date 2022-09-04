@@ -61,7 +61,6 @@ namespace Market.Controllers
           .FirstOrDefault(sweet => sweet.SweetId == id);
       return View(thisSweet);
     }
-
     public ActionResult Edit(int id)
     {
       var thisSweet = _db.Sweets.FirstOrDefault(sweet => sweet.SweetId == id);
