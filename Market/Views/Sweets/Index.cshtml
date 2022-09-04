@@ -4,6 +4,7 @@
 
 @using Market.Models;
 @model IEnumerable<Market.Models.Sweet>
+@model List<Market.Models.Sweet>;
 
 <h1>Sweets for @User.Identity.Name</h1>
 
@@ -12,7 +13,7 @@
   <ul>
     @foreach (Sweet sweet in Model)
     {
-      <li>@Html.ActionLink($"{sweet.Description}", "Details", new { id = sweet.SweetId })</li>
+      <li>@Html.ActionLink($"{sweet.Details}", "Details", new { id = sweet.SweetId })</li>
     }
   </ul>
 } 
@@ -22,5 +23,4 @@ else
 }
 
 <p>@Html.ActionLink("Add new sweet", "Create")</p>
-
 <p>@Html.ActionLink("Home", "Index", "Home")</p>

@@ -14,6 +14,11 @@
 
   @Html.LabelFor(model => model.Name)
   @Html.EditorFor(model => model.Name)
+  @Html.LabelFor(model => model.Details)
+  @Html.EditorFor(model => model.Details)
+
+  @Html.Label("Select sweet")
+  @Html.DropDownList("SweetId")
 
   <input type="submit" value="Save" />
 }
